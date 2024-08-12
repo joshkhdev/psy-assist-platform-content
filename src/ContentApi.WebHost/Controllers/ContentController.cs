@@ -47,17 +47,17 @@ namespace ContentApi.WebHost.Controllers
         }
 
         /// <summary>
-        /// Получить информацию файла по фильтру
+        /// Получить информацию файлов по фильтру
         /// </summary>
-        [HttpPost("GetFileInfoByFilter")]
-        public async Task<IActionResult> GetFileInfoByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
+        [HttpPost("GetFilesInfoByFilter")]
+        public async Task<IActionResult> GetFilesInfoByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
         {
-            var content = await _repository.GetFileInfoByFilterAsync(metadata, cancellationToken);
+            var contents = await _repository.GetFilesInfoByFilterAsync(metadata, cancellationToken);
 
-            if (content.Info == null)
-                return NotFound("File doesn't found");
+            if (contents == null || !contents.Any())
+                return NotFound("Files don't found");
 
-            return Ok(_contentMapping.CreateMap(content));
+            return Ok(_contentMapping.CreateMap(contents));
         }
 
         /// <summary>
@@ -71,21 +71,21 @@ namespace ContentApi.WebHost.Controllers
             if (content.Info == null)
                 return NotFound($"File {id} doesn't found");
 
-            return File(content.Bytes, "application/octet-stream", content.Info.Filename);
+            return Ok(File(content.Bytes, "application/octet-stream", content.Info.Filename));
         }
 
         /// <summary>
-        /// Скачать файл по фильтру
+        /// Скачать файлы по фильтру
         /// </summary>
-        [HttpPost("DownLoadFileByFilter")]
-        public async Task<IActionResult> DownloadFileAsync(FileMetadata metadata, CancellationToken cancellationToken)
+        [HttpPost("DownLoadFilesByFilter")]
+        public async Task<ActionResult<List<FileContentResult>>> DownLoadFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
         {
-            var content = await _repository.DownLoadFileByFilterAsync(metadata, cancellationToken);
+            var contents = await _repository.DownLoadFilesByFilterAsync(metadata, cancellationToken);
 
-            if (content.Info == null)
-                return NotFound("File doesn't found");
+            if (contents == null || !contents.Any())
+                return NotFound("Files don't found");
 
-            return File(content.Bytes, "application/octet-stream", content.Info.Filename);
+            return contents.ToList().ConvertAll(x => File(x.Bytes, "application/octet-stream", x.Info.Filename));
         }
 
         /// <summary>
@@ -99,12 +99,12 @@ namespace ContentApi.WebHost.Controllers
         }
 
         /// <summary>
-        /// Удалить файл по фильтру
+        /// Удалить файлы по фильтру
         /// </summary>
-        [HttpDelete("DeleteFileByFilter")]
+        [HttpDelete("DeleteFilesByFilter")]
         public async Task<IActionResult> DeleteFileByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
         {
-            await _repository.DeleteFileByFilterAsync(metadata, cancellationToken);
+            await _repository.DeleteFilesByFilterAsync(metadata, cancellationToken);
             return NoContent();
         }
 

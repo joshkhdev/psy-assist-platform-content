@@ -28,10 +28,10 @@ namespace ContentApi.DataAccess.Repositories
             return await GetFileInfo(filter, cancellationToken);
         }
 
-        public async Task<T> GetFileInfoByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
+        public async Task<IEnumerable<T>> GetFilesInfoByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
         {
             var filter = InitFilter(metadata);
-            return await GetFileInfo(filter, cancellationToken);
+            return await GetFilesInfo(filter, cancellationToken);
         }
 
         public async Task<T> DownLoadFileByIdAsync(string id, CancellationToken cancellationToken)
@@ -40,10 +40,10 @@ namespace ContentApi.DataAccess.Repositories
             return await DownLoadFile(filter, cancellationToken);
         }
 
-        public async Task<T> DownLoadFileByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
+        public async Task<IEnumerable<T>> DownLoadFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
         {
             var filter = InitFilter(metadata);
-            return await DownLoadFile(filter, cancellationToken);
+            return await DownLoadFiles(filter, cancellationToken);
         }
 
         public async Task DeleteFileByIdAsync(string id, CancellationToken cancellationToken)
@@ -51,7 +51,7 @@ namespace ContentApi.DataAccess.Repositories
             await _dataContext.Bucket.DeleteAsync(new ObjectId(id), cancellationToken);
         }
 
-        public async Task DeleteFileByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
+        public async Task DeleteFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
         {
             var filter = InitFilter(metadata);
             var files = await _dataContext.InfoCollection.FindAsync(filter, cancellationToken: cancellationToken);
@@ -79,10 +79,33 @@ namespace ContentApi.DataAccess.Repositories
             return (T)new Content() { Bytes = bytes, Info = fileInfo };
         }
 
+        private async Task<IEnumerable<T>> DownLoadFiles(FilterDefinition<GridFSFileInfo> filter, CancellationToken cancellationToken)
+        {
+            var infos = await _dataContext.InfoCollection.FindAsync(filter, cancellationToken: cancellationToken);
+            var list = new List<Content>();
+            foreach (var fileInfo in infos.ToList(cancellationToken: cancellationToken))
+            {
+                var content = new Content()
+                {
+                    Info = fileInfo,
+                    Bytes = await _dataContext.Bucket.DownloadAsBytesAsync(fileInfo.Id, cancellationToken: cancellationToken)
+                };
+                list.Add(content);
+            }
+            return (IEnumerable<T>)list;
+        }
+
         private async Task<T> GetFileInfo(FilterDefinition<GridFSFileInfo> filter, CancellationToken cancellationToken)
         {
             var infos = await _dataContext.InfoCollection.FindAsync(filter, cancellationToken: cancellationToken);
             return (T)new Content() { Info = infos.FirstOrDefault(cancellationToken: cancellationToken) };
+        }
+
+        private async Task<IEnumerable<T>> GetFilesInfo(FilterDefinition<GridFSFileInfo> filter, CancellationToken cancellationToken)
+        {
+            var infos = await _dataContext.InfoCollection.FindAsync(filter, cancellationToken: cancellationToken);
+            var list = infos.ToList(cancellationToken: cancellationToken).ConvertAll(x => new Content { Info = x });
+            return (IEnumerable<T>)list;
         }
 
         private FilterDefinition<GridFSFileInfo> InitFilter(string id)
