@@ -1,9 +1,8 @@
-﻿namespace ContentApi.DataAccess
-{
-    public class DatabaseSettings
-    {
-        public string ConnectionString { get; set; } = null!;
+﻿namespace ContentApi.DataAccess;
 
-        public string DatabaseName { get; set; } = null!;
-    }
+public class DatabaseSettings
+{
+    public string ConnectionString { get; set; } = null!;
+
+    public string DatabaseName { get; set; } = null!;
 }

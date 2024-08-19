@@ -1,9 +1,8 @@
 ﻿using MongoDB.Bson;
 
-namespace ContentApi.Core
+namespace ContentApi.Core;
+
+public class BaseEntity
 {
-    public class BaseEntity
-    {
-        public ObjectId Id { get; set; }
-    }
+    public ObjectId Id { get; set; }
 }

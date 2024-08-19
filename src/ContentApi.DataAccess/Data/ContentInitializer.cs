@@ -1,18 +1,17 @@
-﻿namespace ContentApi.DataAccess.Data
+﻿namespace ContentApi.DataAccess.Data;
+
+public class ContentInitializer : IDbInitializer
 {
-    public class ContentInitializer : IDbInitializer
+    private readonly DataContext _dataContext;
+
+    public ContentInitializer(DataContext dataContext)
     {
-        private readonly DataContext _dataContext;
+        _dataContext = dataContext;
+    }
 
-        public ContentInitializer(DataContext dataContext)
-        {
-            _dataContext = dataContext;
-        }
-
-        public void InitializeDb()
-        {
-            _dataContext.Client.DropDatabase(_dataContext.Db.DatabaseNamespace.DatabaseName);
-            _dataContext.Bucket.UploadFromBytes(FakeDataFactory.FileName, FakeDataFactory.ContentSample.Bytes, FakeDataFactory.UploadOptions);
-        }
+    public void InitializeDb()
+    {
+        _dataContext.Client.DropDatabase(_dataContext.Db.DatabaseNamespace.DatabaseName);
+        _dataContext.Bucket.UploadFromBytes(FakeDataFactory.FileName, FakeDataFactory.ContentSample.Bytes, FakeDataFactory.UploadOptions);
     }
 }

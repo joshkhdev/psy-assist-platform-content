@@ -3,6 +3,9 @@ services:
   #Content Db
   content-db:
     image: "mongo"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 1234    
     container_name: 'content-db'
     restart: always 
     ports:

@@ -1,7 +1,6 @@
-﻿namespace ContentApi.DataAccess.Data
+﻿namespace ContentApi.DataAccess.Data;
+
+public interface IDbInitializer
 {
-    public interface IDbInitializer
-    {
-        void InitializeDb();
-    }
+    void InitializeDb();
 }
