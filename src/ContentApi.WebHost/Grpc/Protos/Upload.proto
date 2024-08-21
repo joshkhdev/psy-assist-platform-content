@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "ContentApi.WebHost.Grpc.Protos";
+
+package GrpcServices;
+
+service Uploader {
+	rpc UploadFile (UploadRequest) returns (Id);
+}
+
+message Id {
+    string value = 1;
+}
+
+message UploadRequest {
+    string psyId = 1;
+    string fileName = 2;
+    int32 fileType = 3;
+    string base64 = 4;
+}

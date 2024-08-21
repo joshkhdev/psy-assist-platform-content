@@ -8,16 +8,12 @@ namespace ContentApi.DataAccess;
 public class DataContext : DbContext
 {
     private readonly IMongoDatabase _database;
-    public IMongoDatabase Db => _database;
 
     private readonly MongoClient _client;
-    public MongoClient Client => _client;
 
     private readonly GridFSBucket _bucket;
-    public GridFSBucket Bucket => _bucket;
 
     private readonly IMongoCollection<GridFSFileInfo> _collection;
-    public IMongoCollection<GridFSFileInfo> InfoCollection => _collection;
 
     public DataContext(IOptions<DatabaseSettings> databaseSettings)
     {
@@ -30,4 +26,12 @@ public class DataContext : DbContext
         _bucket = new GridFSBucket(_database, gridFSBucketOptions);
         _collection = _database.GetCollection<GridFSFileInfo>("Content.files");
     }
+
+    public IMongoDatabase Db => _database;
+
+    public MongoClient Client => _client;
+
+    public GridFSBucket Bucket => _bucket;
+
+    public IMongoCollection<GridFSFileInfo> InfoCollection => _collection;
 }

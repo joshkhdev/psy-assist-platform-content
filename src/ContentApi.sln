@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContentApi.DataAccess", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContentApi.WebHost", "ContentApi.WebHost\ContentApi.WebHost.csproj", "{CD2B9909-B3E6-4309-865C-ADE55B73F9EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentApi.UnitTests", "ContentApi.UnitTests\ContentApi.UnitTests.csproj", "{9AAC721B-BB85-4201-B415-B220F9C19AEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContentApi.UnitTests", "ContentApi.UnitTests\ContentApi.UnitTests.csproj", "{9AAC721B-BB85-4201-B415-B220F9C19AEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

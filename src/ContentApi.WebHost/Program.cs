@@ -3,6 +3,7 @@ using ContentApi.DataAccess.Repositories;
 using ContentApi.Core.Abstractions.Repositories;
 using ContentApi.WebHost.Mapping;
 using ContentApi.DataAccess.Data;
+using ContentApi.WebHost.Grpc.Services;
 
 namespace ContentApi.WebHost;
 
@@ -20,6 +21,8 @@ public class Program
         builder.Services.AddScoped<DataContext>();
         builder.Services.AddScoped<IDbInitializer, ContentInitializer>();
         builder.Services.AddScoped<IContentMapping, ContentMapping>();
+
+        builder.Services.AddGrpc();
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -45,6 +48,7 @@ public class Program
 
         app.UseAuthorization();
         app.MapControllers();
+        app.MapGrpcService<UploadService>();
 
         app.Run();
     }
