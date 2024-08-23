@@ -34,13 +34,13 @@ public class ContentRepository<T> : IRepository<T> where T : Content
         return await GetFilesInfo(filter, cancellationToken);
     }
 
-    public async Task<T> DownLoadFileByIdAsync(string id, CancellationToken cancellationToken)
+    public async Task<T> DownloadFileByIdAsync(string id, CancellationToken cancellationToken)
     {
         var filter = InitFilter(id);
         return await DownLoadFile(filter, cancellationToken);
     }
 
-    public async Task<IEnumerable<T>> DownLoadFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
+    public async Task<IEnumerable<T>> DownloadFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
     {
         var filter = InitFilter(metadata);
         return await DownLoadFiles(filter, cancellationToken);

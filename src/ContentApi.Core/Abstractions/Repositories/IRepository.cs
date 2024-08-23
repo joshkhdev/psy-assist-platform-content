@@ -10,9 +10,9 @@ public interface IRepository<T> where T : Content
 
     Task<IEnumerable<T>> GetFilesInfoByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken);
 
-    Task<T> DownLoadFileByIdAsync(string id, CancellationToken cancellationToken);
+    Task<T> DownloadFileByIdAsync(string id, CancellationToken cancellationToken);
 
-    Task<IEnumerable<T>> DownLoadFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken);
+    Task<IEnumerable<T>> DownloadFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken);
 
     Task DeleteFileByIdAsync(string id, CancellationToken cancellationToken);
 

@@ -27,7 +27,7 @@ public class ContentController : ControllerBase
         var contents = await _repository.GetAllFilesInfoAsync(cancellationToken);
 
         if (contents == null || !contents.Any())
-            return NotFound("Files don't found");
+            return NotFound("Files not found ");
 
         return Ok(_contentMapping.CreateMap(contents));
     }
@@ -41,7 +41,7 @@ public class ContentController : ControllerBase
         var content = await _repository.GetFileInfoByIdAsync(id, cancellationToken);
 
         if (content.Info == null)
-            return NotFound($"File {id} doesn't found");
+            return NotFound($"File {id} not found");
 
         return Ok(_contentMapping.CreateMap(content));
     }
@@ -55,7 +55,7 @@ public class ContentController : ControllerBase
         var contents = await _repository.GetFilesInfoByFilterAsync(metadata, cancellationToken);
 
         if (contents == null || !contents.Any())
-            return NotFound("Files don't found");
+            return NotFound("Files not found ");
 
         return Ok(_contentMapping.CreateMap(contents));
     }
@@ -66,10 +66,10 @@ public class ContentController : ControllerBase
     [HttpGet("DownloadFileById")]
     public async Task<IActionResult> DownloadFileByIdAsync(string id, CancellationToken cancellationToken)
     {
-        var content = await _repository.DownLoadFileByIdAsync(id, cancellationToken);
+        var content = await _repository.DownloadFileByIdAsync(id, cancellationToken);
 
         if (content.Info == null)
-            return NotFound($"File {id} doesn't found");
+            return NotFound($"File {id} not found");
 
         return Ok(File(content.Bytes, "application/octet-stream", content.Info.Filename));
     }
@@ -78,12 +78,12 @@ public class ContentController : ControllerBase
     /// Скачать файлы по фильтру
     /// </summary>
     [HttpPost("DownloadFilesByFilter")]
-    public async Task<ActionResult<List<FileContentResult>>> DownLoadFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<FileContentResult>>> DownloadFilesByFilterAsync(FileMetadata metadata, CancellationToken cancellationToken)
     {
-        var contents = await _repository.DownLoadFilesByFilterAsync(metadata, cancellationToken);
+        var contents = await _repository.DownloadFilesByFilterAsync(metadata, cancellationToken);
 
         if (contents == null || !contents.Any())
-            return NotFound("Files don't found");
+            return NotFound("Files not found ");
 
         return contents.ToList().ConvertAll(x => File(x.Bytes, "application/octet-stream", x.Info.Filename));
     }
