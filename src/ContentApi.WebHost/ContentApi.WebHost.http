@@ -1,0 +1,6 @@
+@ContentApi.WebHost_HostAddress = http://localhost:5253
+
+GET {{ContentApi.WebHost_HostAddress}}/api/Content/GetAllFilesInfo
+Accept: application/json
+
+###

@@ -1,0 +1,29 @@
+version: '3'
+services:
+  #Content Api
+  content-api:
+    build: src
+    container_name: 'content-api'
+    restart: no
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:8081;http://+:8080 
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=hello
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro      
+    ports:
+      - "7123:8080"
+      - "7124:8081"
+    depends_on: 
+      - content-db      
+  #Content Db
+  content-db:
+    image: "mongo"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 1234    
+    container_name: 'content-db'
+    restart: always 
+    ports:
+      - 27017:27017      
